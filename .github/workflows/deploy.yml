@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -16,9 +17,11 @@ jobs:
         run: |
           echo "$PEM_FILE" > key.pem
           chmod 600 key.pem
+
           ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@13.51.205.55 "
             cd cicd &&
             sudo git pull &&
             sudo docker compose up --build -d
           "
+
           rm -f key.pem
